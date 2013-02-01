@@ -1,0 +1,55 @@
+--network
+net = rednet
+net.open("top")
+net.open("bottom")
+net.open("left")
+net.open("back")
+net.open("right")
+URLS = {"https://raw.github.com/Deathbyfarting/OS-R/master/startup", https://raw.github.com/Deathbyfarting/OS-R/master/wallpaper}
+Path = {"/startup",/bios/wallpaper}
+
+update = "https://raw.github.com/Deathbyfarting/OS-R/master/README.md"
+
+function getFile(url,path)
+        print("getting "..url)
+        local content = http.get(url)
+        local file = fs.open(path,"w")
+        print("removing \\")
+write = textutils.serialize(content.readAll())
+a = string.gsub(write, '\\', " " )
+        file.write(a)
+        file.close()
+        print("done")
+end
+if not fs.exists("/bios/version") then  --makes the check agaist file if needed
+fs.makeDir("/bios")
+local file = fs.open("/bios/version","w")
+file.write("version 0.00.00")
+file.close()
+print("created version file")
+end            --end if exists
+
+--get version
+file = fs.open("/bios/version","r")
+local version = file.readLine()
+print(version)
+file.close()
+
+local checkup = http.get(update)
+fs.makeDir("/bios")
+local content = textutils.serialize(checkup.readAll())
+local text = string.match(content, version) 
+if text == version then 
+print("no update needed")
+else
+print("update Needed") 
+for i = 1, # URLS do
+getFile(URLS[i],Path[i]) end
+
+local file = fs.open("/bios/version","w")
+versionfin = string.gsub(content, '\\', " " )
+file.write(versionfin)
+file.close()
+print("content dumped into file")
+
+end
