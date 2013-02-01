@@ -1,0 +1,11 @@
+os.loadAPI("thisIsATest")
+
+Tick = function()
+os.startTimer(2)
+event, z, x, y = os.pullEvent()
+if event == "click" then
+
+
+end--if
+
+end
