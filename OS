@@ -1,6 +1,9 @@
 os.loadAPI("thisIsATest")
 
 Tick = function()
+--wallpaper = paintutils.loadImage("/wallpaper")
+--OSR.login()
+--paintutils.drawImage(wallpaper, 1, 1)
 os.startTimer(2)
 event, z, x, y = os.pullEvent()
 if event == "click" then
