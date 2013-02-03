@@ -42,3 +42,11 @@ file.close()
 print( "done ")
 end--if
 end--func
+
+printTime = function(x,y)
+local time = os.time()
+time = textutils.formatTime(time, false)
+term.setCursorPos(x,y)
+term.clear()
+print(time)
+end
