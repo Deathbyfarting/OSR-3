@@ -1,6 +1,18 @@
 if not term.isColor() then error("you must run this OS on a adv computer") end
-
 os.loadAPI("thisIsATest")
+
+term.setBackgroundColor(colors.blue)
+term.clear()
+term.setCursorPos(20,8)
+textutils.slowWrite("version", 100)
+for i = 0, 25 do
+term.setCursorPos(11+i,9)
+textutils.slowWrite("-", 100) end
+term.setCursorPos(21,10)
+textutils.slowWrite("OS-R", 100)
+sleep(3)
+
+
 
 Tick = function()
 --wallpaper = paintutils.loadImage("/wallpaper")
@@ -11,6 +23,8 @@ event, z, x, y = os.pullEvent()
 if event == "click" then
 
 
+
 end--if
+
 
 end
