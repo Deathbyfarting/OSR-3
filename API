@@ -1,0 +1,21 @@
+keyCard = function(passcode)-- takes a code and looks for it in /disk/code
+while true do
+event, side = os.pullEvent()
+if event == "disk" and fs.exists("disk/code") then
+local code = fs.open("/disk/code","r")
+content = textutils.serialize(code.readAll())
+code.close()
+text = string.match(content, passcode)
+
+if passcode == text then
+print("security access granted")
+redstone.setOutput("back", true)
+sleep(3)
+redstone.setOutput("back", false)
+end
+
+
+
+end--if
+end--while
+end--function
