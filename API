@@ -1,7 +1,19 @@
-keyCard = function(passcode)-- takes a code and looks for it in /disk/code
+diskSide = function()
+if disk.isPresent("right") then return "right" end
+if disk.isPresent("left") then return "left" end
+if disk.isPresent("front") then return "front" end
+if disk.isPresent("bottom") then return "bottom" end
+if disk.isPresent("top") then return "top" end
+end
+Side = diskSide()
+pass = " "
+file = " "
+
+keyCard = function(passcode,eternal)
+print("starting keycard check")
 while true do
 event, side = os.pullEvent()
-if event == "disk" and fs.exists("disk/code") then
+if event == "disk" and fs.exists("disk/code") and disk.getLabel(Side,"Key Card") then
 local code = fs.open("/disk/code","r")
 content = textutils.serialize(code.readAll())
 code.close()
@@ -12,10 +24,21 @@ print("security access granted")
 redstone.setOutput("back", true)
 sleep(3)
 redstone.setOutput("back", false)
+disk.eject(Side)
+if not eternal then break end
 end
-
-
 
 end--if
 end--while
 end--function
+
+newCard = function(pass)
+if fs.exists("disk/code") then
+print("card already in use")
+else
+local file = fs.open("/disk/code", "w")
+file.write(pass)
+file.close()
+print( "done ")
+end--if
+end--func
