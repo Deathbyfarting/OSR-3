@@ -1,3 +1,10 @@
+--diskSide() returns the side diskdrive is on
+--keycard(pass,boolean) pass = what code it is looking on, boolean is wether it runs forever
+--newCard(pass) pass = what code is written in disk/code file
+--printTime(x,y) takes x,y cords of were to print the time
+--isOn(x,y,endY,endX,mouseX,mouseY) x,y,endX,endY are the start and stop of the size of 
+--button feed mouse poses in mouseX and mouseY and will return true if it is
+
 diskSide = function()
 if disk.isPresent("right") then return "right" end
 if disk.isPresent("left") then return "left" end
@@ -57,4 +64,14 @@ and y < mouseY and endY+1 < mouseY then
 return true
 else
 return false
+end
+
+term.clear()
+isOn = function(x,y,endX,endY,mouseX,mouseY)
+if mouseX > x-1 and mouseX < endX+1 and
+   mouseY > y-1 and mouseY < endY+1 then
+return true,id
+else
+return false
+end
 end
