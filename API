@@ -50,3 +50,11 @@ term.setCursorPos(x,y)
 term.clear()
 print(time)
 end
+
+isOn = function(x,y,endX,endY,mouseX,mouseY)
+if x-1 < mouseX and endX+1 < mouseX
+and y < mouseY and endY+1 < mouseY then
+return true
+else
+return false
+end
