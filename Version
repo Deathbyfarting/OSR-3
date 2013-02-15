@@ -3,6 +3,10 @@ OSR
 this version of OSR is designed to be used for all porpose OS for use in resource saving on servers and keep customizeablity
 this file is also used version checking.
 
+OSR comes with an interactive Gate network system that is fully interactive. this OSR-Gate net uses command blocks to 
+teleport you to a given spacethe 7 chevrons given to it can help determin a destination. This can be nigated by running
+it in tele = false mode which checks the input address to a internal bank of addresses. Pressing the activation button before
+7 symbols have been enter resalts in failure to connect wipping the memmory bank.
 
 
 Version 1.00.00
