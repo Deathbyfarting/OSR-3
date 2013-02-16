@@ -2,8 +2,12 @@
 --keycard(pass,boolean) pass = what code it is looking on, boolean is wether it runs forever
 --newCard(pass) pass = what code is written in disk/code file
 --printTime(x,y) takes x,y cords of were to print the time
---isOn(x,y,endY,endX,mouseX,mouseY) x,y,endX,endY are the start and stop of the size of 
+--isOn(x,y,endX,endY,mouseX,mouseY) x,y,endX,endY are the start and stop of the size of 
 --button feed mouse poses in mouseX and mouseY and will return true if it is
+--window(x,y)x and y is the size of window must be / by 2
+--centerPos() centers the cursor pos
+--nilCheck(numb) checks if numb is nil if so returns 0 if not nothing
+
 
 diskSide = function()
 if disk.isPresent("right") then return "right" end
@@ -54,24 +58,37 @@ printTime = function(x,y)
 local time = os.time()
 time = textutils.formatTime(time, false)
 term.setCursorPos(x,y)
-term.clear()
 print(time)
 end
 
 isOn = function(x,y,endX,endY,mouseX,mouseY)
-if x-1 < mouseX and endX+1 < mouseX
-and y < mouseY and endY+1 < mouseY then
+if mouseX > x-1 and mouseX < endX+1 and
+   mouseY > y-1 and mouseY < endY+1 then
 return true
 else
 return false
 end
-
-term.clear()
-isOn = function(x,y,endX,endY,mouseX,mouseY)
-if mouseX > x-1 and mouseX < endX+1 and
-   mouseY > y-1 and mouseY < endY+1 then
-return true,id
-else
-return false
 end
+
+window = function(sizeX,sizeY)
+for i = 0, 15 do
+RY = sizeY/2
+RX = sizeX/2
+paintutils.drawLine(Cx-RX, Cy-RY+i, Cx+RX, Cy-RY+i, colors.lightGray) end
+
+paintutils.drawLine(Cx-RX, Cy-RY, Cx+RX, Cy-RY, colors.gray)
+term.setBackgroundColor(colors.red)
+term.setCursorPos(Cx-RX,Cy-RY)
+print("X")
+end
+
+centerPos = function()
+local x, y = term.getSize()
+return x/2,y/2
+end
+Cx,Cy = centerPos()
+
+nilCheck = function(var)
+if var == nil then var = 0 end
+return var
 end
