@@ -1,52 +1,57 @@
+--"800 6 700"-x y z
+validGates = {"+1a2a3a4a5a6a7a80","+1b2b3b4b5b6b7b8b","end"}
+path = {"495 23 261","518 21 256","end"}
 symbol={"a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z","A","B","C","D","E","F","G","H","I","J","end"}
-place = {"+1a2a3a4a5a6a7a"}
 
-DHD = function(input)
+--sender
+DHD = function()
 os.loadAPI("API")
 rednet.open("top")
-tele = input
-place = {"+1a2a3a4a5a6a7a"}
-
 isDone = false
 address = "+"
 shevron = {0}
+
+symbPosX={18,23,28,33,38,43,48,18,23,28,33,38,43,48,18,23,28,33,38,43,48,18,23,28,33,38,43,48,18,23,28,33,38,43,48,33}
+symbPosY={3,3,3,3,3,3,3,6,6,6,6,6,6,6,9,9,9,9,9,9,9,12,12,12,12,12,12,12,15,15,15,15,15,15,15,18}
+
 setSymbols = function()
 term.setBackgroundColor(colors.black)
 term.clear()
-for i=0,2 do paintutils.drawLine(26,8+i,22,8+i,colors.lightGray) end
-
---top
+for i = 1, #symbPosX  do
+term.setCursorPos(symbPosX[i],symbPosY[i])
 term.setBackgroundColor(colors.gray)
-for i = 0, 6 do--7
-term.setCursorPos(18+i*2,4) print(symbol[i+1]) end--start at 1
---top / inner
-for i = 0, 4 do--5
-term.setCursorPos(20+i*2,6) print(symbol[i+8]) end
+print("   ")
+term.setCursorPos(symbPosX[i],symbPosY[i]-1)
+print(" "..symbol[i].." ") end
+--panel
+for i = 1, 15 do paintutils.drawLine(0+i,1,0+i,19,colors.lightGray) end
+--center button
 
---bottom
 term.setBackgroundColor(colors.gray)
-for i = 0, 6 do
-term.setCursorPos(18+i*2,14) print(symbol[i+13]) end
---bottom / inner
-for i = 0, 4 do
-term.setCursorPos(20+i*2,12) print(symbol[i+20]) end
+term.setCursorPos(3,17)
+print("          ")
+term.setCursorPos(3,18)
+print("          ")
+term.setBackgroundColor(colors.red)
+term.setCursorPos(4,17)
+print("        ")
 
---side / left
-term.setBackgroundColor(colors.gray)
-for i = 0, 3 do
-term.setCursorPos(18,6+i*2) print(symbol[i+25]) end
---side / left inner
-for i = 0, 1 do
-term.setCursorPos(20,8+i*2) print(symbol[i+29]) end
+--current address
+term.setBackgroundColor(colors.black)
+term.setCursorPos(5,3)
+print("Address")
 
---side / right
-term.setBackgroundColor(colors.gray)
-for i = 0, 3 do
-term.setCursorPos(30,6+i*2) print(symbol[i+31]) end
---side / right inner
-for i = 0, 1 do
-term.setCursorPos(28,8+i*2) print(symbol[i+35]) end
+--most resent symbol
+term.setBackgroundColor(colors.black)
+term.setCursorPos(5,10)
+print("Actived")
+for i = 1, 3 do
+paintutils.drawLine(6,10+i,10,10+i,colors.black) end
 
+--version
+term.setBackgroundColor(colors.lightGray)
+term.setCursorPos(1,1)
+print("OSR-Gate")
 end
 
 setSymbols()
@@ -56,244 +61,39 @@ mouseX = API.nilCheck(mouseX)
 mouseY = API.nilCheck(mouseY)
 button = API.nilCheck(button)
 
---button 1
-if API.isOn(18,4,18,4,mouseX,mouseY) and not isDone then 
-term.setBackgroundColor(colors.orange)
-term.setCursorPos(18,4) print(symbol[1])
-table.insert(shevron, 1, symbol[1]) end
+--print(mouseY)
+--print(mouseX)
 
---button 2
-if API.isOn(20,4,20,4,mouseX,mouseY) and not isDone then
+for i=1, 36 do
+if API.isOn(symbPosX[i],symbPosY[i]-1,symbPosX[i]+3,symbPosY[i]+1,mouseX,mouseY) and not isDone then
 term.setBackgroundColor(colors.orange)
-term.setCursorPos(20,4) print(symbol[2])
-table.insert(shevron, 1, symbol[2]) end
-
---button 3
-if API.isOn(22,4,22,4,mouseX,mouseY) and not isDone then
-term.setBackgroundColor(colors.orange)
-term.setCursorPos(22,4) print(symbol[3])
-table.insert(shevron, 1, symbol[3]) end
-
---button 4
-if API.isOn(24,4,24,4,mouseX,mouseY) and not isDone then
-term.setBackgroundColor(colors.orange)
-term.setCursorPos(24,4) print(symbol[4])
-table.insert(shevron, 1, symbol[4]) end
-
---button 5
-if API.isOn(26,4,26,4,mouseX,mouseY) and not isDone then
-term.setBackgroundColor(colors.orange)
-term.setCursorPos(26,4) print(symbol[5])
-table.insert(shevron, 1, symbol[5]) end
-
---button 6
-if API.isOn(28,4,28,4,mouseX,mouseY) and not isDone then
-term.setBackgroundColor(colors.orange)
-term.setCursorPos(28,4) print(symbol[6])
-table.insert(shevron, 1, symbol[6]) end
-
---button 7
-if API.isOn(30,4,30,4,mouseX,mouseY) and not isDone then
-term.setBackgroundColor(colors.orange)
-term.setCursorPos(30,4) print(symbol[7])
-table.insert(shevron, 1, symbol[7]) end
-
---button 8
-if API.isOn(20,8,20,8,mouseX,mouseY) and not isDone then
-term.setBackgroundColor(colors.orange)
-term.setCursorPos(20,8) print(symbol[29])
-table.insert(shevron, 1, symbol[29]) end
-
---button 9
-if API.isOn(18,8,18,8,mouseX,mouseY) and not isDone then
-term.setBackgroundColor(colors.orange)
-term.setCursorPos(18,8) print(symbol[26])
-table.insert(shevron, 1, symbol[26]) end
-
---button 10
-if API.isOn(18,10,18,10,mouseX,mouseY) and not isDone then
-term.setBackgroundColor(colors.orange)
-term.setCursorPos(18,10) print(symbol[27])
-table.insert(shevron, 1, symbol[27]) end
-
---button 11
-if API.isOn(18,6,18,6,mouseX,mouseY) and not isDone then
-term.setBackgroundColor(colors.orange)
-term.setCursorPos(18,6) print(symbol[25])
-table.insert(shevron, 1, symbol[25]) end
-
---button 12
-if API.isOn(20,6,20,6,mouseX,mouseY) and not isDone then
-term.setBackgroundColor(colors.orange)
-term.setCursorPos(20,6) print(symbol[8])
-table.insert(shevron, 1, symbol[8]) end
-
---button 13
-if API.isOn(22,6,22,6,mouseX,mouseY) and not isDone then
-term.setBackgroundColor(colors.orange)
-term.setCursorPos(22,6) print(symbol[9])
-table.insert(shevron, 1, symbol[9]) end
-
---button 14
-if API.isOn(24,6,24,6,mouseX,mouseY) and not isDone then
-term.setBackgroundColor(colors.orange)
-term.setCursorPos(24,6) print(symbol[10])
-table.insert(shevron, 1, symbol[10]) end
-
---button 15
-if API.isOn(26,6,26,6,mouseX,mouseY) and not isDone then
-term.setBackgroundColor(colors.orange)
-term.setCursorPos(26,6) print(symbol[11])
-table.insert(shevron, 1, symbol[11]) end
-
---button 16
-if API.isOn(28,6,28,6,mouseX,mouseY) and not isDone then
-term.setBackgroundColor(colors.orange)
-term.setCursorPos(28,6) print(symbol[12])
-table.insert(shevron, 1, symbol[12]) end
-
---button 17
-if API.isOn(30,6,30,6,mouseX,mouseY) and not isDone then
-term.setBackgroundColor(colors.orange)
-term.setCursorPos(30,6) print(symbol[31])
-table.insert(shevron, 1, symbol[31])end
-
---button 18
-if API.isOn(28,8,28,8,mouseX,mouseY) and not isDone then
-term.setBackgroundColor(colors.orange)
-term.setCursorPos(28,8) print(symbol[35])
-table.insert(shevron, 1, symbol[35]) end
-
---button 19
-if API.isOn(20,8,20,8,mouseX,mouseY) and not isDone then
-term.setBackgroundColor(colors.orange)
-term.setCursorPos(20,8) print(symbol[29])
-table.insert(shevron, 1, symbol[29]) end
-
---button 20
-if API.isOn(20,10,20,10,mouseX,mouseY) and not isDone then
-term.setBackgroundColor(colors.orange)
-term.setCursorPos(20,10) print(symbol[30])
-table.insert(shevron, 1, symbol[30]) end
---row
---button 21
-if API.isOn(18,12,18,12,mouseX,mouseY) and not isDone then
-term.setBackgroundColor(colors.orange)
-term.setCursorPos(18,12) print(symbol[28])
-table.insert(shevron, 1, symbol[28]) end
-
---button 22
-if API.isOn(20,12,20,12,mouseX,mouseY) and not isDone then
-term.setBackgroundColor(colors.orange)
-term.setCursorPos(20,12) print(symbol[20])
-table.insert(shevron, 1, symbol[20]) end
-
---button 23
-if API.isOn(22,12,22,12,mouseX,mouseY) and not isDone then
-term.setBackgroundColor(colors.orange)
-term.setCursorPos(22,12) print(symbol[21])
-table.insert(shevron, 1, symbol[21]) end
-
---button 24
-if API.isOn(24,12,24,12,mouseX,mouseY) and not isDone then
-term.setBackgroundColor(colors.orange)
-term.setCursorPos(24,12) print(symbol[22])
-table.insert(shevron, 1, symbol[22]) end
-
---button 25
-if API.isOn(26,12,26,12,mouseX,mouseY) and not isDone then
-term.setBackgroundColor(colors.orange)
-term.setCursorPos(26,12) print(symbol[23])
-table.insert(shevron, 1, symbol[23]) end
-
---button 26
-if API.isOn(28,12,28,12,mouseX,mouseY) and not isDone then
-term.setBackgroundColor(colors.orange)
-term.setCursorPos(28,12) print(symbol[24])
-table.insert(shevron, 1, symbol[24]) end
-
---button 27
-if API.isOn(30,12,30,12,mouseX,mouseY) and not isDone then
-term.setBackgroundColor(colors.orange)
-term.setCursorPos(30,12) print(symbol[34])
-table.insert(shevron, 1, symbol[34])end
-
---button 28
-if API.isOn(30,10,30,10,mouseX,mouseY) and not isDone then
-term.setBackgroundColor(colors.orange)
-term.setCursorPos(30,10) print(symbol[33])
-table.insert(shevron, 1, symbol[33]) end
---
---button 29
-if API.isOn(28,10,28,10,mouseX,mouseY) and not isDone then
-term.setBackgroundColor(colors.orange)
-term.setCursorPos(28,10) print(symbol[36])
-table.insert(shevron, 1, symbol[36]) end
-
---button 30
-if API.isOn(30,8,30,8,mouseX,mouseY) and not isDone then
-term.setBackgroundColor(colors.orange)
-term.setCursorPos(30,8) print(symbol[32])
-table.insert(shevron, 1, symbol[32]) end
-
---button 31
-if API.isOn(18,14,18,14,mouseX,mouseY) and not isDone then
-term.setBackgroundColor(colors.orange)
-term.setCursorPos(18,14) print(symbol[13])
-table.insert(shevron, 1, symbol[13]) end
-
---button 32
-if API.isOn(20,14,20,14,mouseX,mouseY) and not isDone then
-term.setBackgroundColor(colors.orange)
-term.setCursorPos(20,14) print(symbol[14])
-table.insert(shevron, 1, symbol[14]) end
-
---button 33
-if API.isOn(22,14,22,14,mouseX,mouseY) and not isDone then
-term.setBackgroundColor(colors.orange)
-term.setCursorPos(22,14) print(symbol[15])
-table.insert(shevron, 1, symbol[15]) end
-
---button 34
-if API.isOn(24,14,24,14,mouseX,mouseY) and not isDone then
-term.setBackgroundColor(colors.orange)
-term.setCursorPos(24,14) print(symbol[16])
-table.insert(shevron, 1, symbol[16]) end
-
---button 35
-if API.isOn(26,14,26,14,mouseX,mouseY) and not isDone then
-term.setBackgroundColor(colors.orange)
-term.setCursorPos(26,14) print(symbol[17])
-table.insert(shevron, 1, symbol[17])end
-
---button 36
-if API.isOn(28,14,28,14,mouseX,mouseY) and not isDone then
-term.setBackgroundColor(colors.orange)
-term.setCursorPos(28,14) print(symbol[18])
-table.insert(shevron, 1, symbol[18]) end
-
---button 37
-if API.isOn(30,14,30,14,mouseX,mouseY) and not isDone then
-term.setBackgroundColor(colors.orange)
-term.setCursorPos(30,14) print(symbol[19])
-table.insert(shevron, 1, symbol[19]) end
-
+term.setCursorPos(symbPosX[i],symbPosY[i])
+print("   ")
+table.insert(shevron, 1, symbol[i]) 
+--activation
+term.setBackgroundColor(colors.black)
+term.setCursorPos(8,12)
+print(symbol[i]) end
+end
 
 --center button
-if API.isOn(22,8,26,10,mouseX,mouseY) then
-for i=0, 2 do paintutils.drawLine(26,8+i,22,8+i,colors.orange) end
+if API.isOn(3,17,12,18,mouseX,mouseY) then
+term.setBackgroundColor(colors.gray)
+term.setCursorPos(3,17)
+print("          ")
+term.setCursorPos(3,18)
+print("          ")
+term.setBackgroundColor(colors.orange)
+term.setCursorPos(4,17)
+print("        ")
 sleep(1)
 if shevron[8] ~= nil then
-for i = 1, 7 do
+for i = 1, 8 do
 address = address..i..shevron[i]
 end
-print(address)
-for i = 1, #place do if address == place[i] or tele then
 rednet.broadcast(address)
 id,done,dis = rednet.receive(300)
 if done == "DHDdone" then end
-end end--if and for
-
 end--shev
 setSymbols()
 shevron = {0}
@@ -301,95 +101,59 @@ address = "+"
 isDone = false
 end
 
-if event == "key" then
-if button == 0 then break end
-end
+if event == "key" and button == 0 then break end
 
+if redstone.getInput("back") then
+term.setBackgroundColor(colors.red)
+term.setCursorPos(2,16)
+print("over Clocked")
+if shevron[9] ~= nil then 
+isDone = true
+end
+else
 if shevron[8] ~= nil then 
 isDone = true
 end
+end
+
+--print address
+paintutils.drawLine(1,4,10,4,colors.lightGray)
+printadd=shevron[1]
+for i=2, #shevron do printadd = printadd.." "..shevron[i] end
+length = string.len(printadd)
+length=length/2
+term.setCursorPos(10-length,4)
+printadd = string.reverse(printadd)
+printadd=string.gsub (printadd,"0","")
+printadd=string.gsub(printadd," ","",1)
+term.setBackgroundColor(colors.black)
+print(printadd)
+
 end--while
 term.setBackgroundColor(colors.black)
 term.setCursorPos(1,1)
 term.clear()
 os.unloadAPI("API")
-
 end--func DHD
 
-decode = function(input)
-for i = 1, 36 do
-if symbol[i] == input then return i end
-end
-end--decode
-
-GateControl = function(eternal)
-Help()
+--receiver
+GateControl = function(tele)
 local Gate=peripheral.wrap("back")
 rednet.open("bottom")
 
-while eternal do
+while true do
 if redstone.getInput("right") then redstone.setOutput("right",false) end
 if redstone.getInput("left") then redstone.setOutput("left",false) end
-gateAddress = "tp @p "
+defalt = "tp @p "
 
 print(">")
-id,done,dis = rednet.receive()
-rednet.broadcast("DHDdone")
-
+id,memory,dis = rednet.receive()
 redstone.getInput("top")
+print(memory)
+for i=1, #validGates do
+if memory == validGates[i] then 
+gateAddress =defalt..path[i]
 
-print(done)
-
-chevron1 = string.match(done,"1.")
-done = string.gsub(done,"1.","")
-chevron1 = string.gsub(chevron1,"1","")
-chevron1 = decode(chevron1)
-
-chevron2 = string.match(done,"2.")
-done = string.gsub(done,"2.","")
-chevron2 = string.gsub(chevron2,"2","")
-chevron2 = decode(chevron2)
-
-chevron3 = string.match(done,"3.")
-done = string.gsub(done,"3.","")
-chevron3 = string.gsub(chevron3,"3","")
-chevron3 = decode(chevron3)
-
-chevron4 = string.match(done,"4.")
-done = string.gsub(done,"4.","")
-chevron4 = string.gsub(chevron4,"4","")
-chevron4 = decode(chevron4)
-
-chevron5 = string.match(done,"5.")
-done = string.gsub(done,"5.","")
-chevron5 = string.gsub(chevron5,"5","")
-chevron5 = decode(chevron5)
-
-chevron6 = string.match(done,"6.")
-done = string.gsub(done,"6.","")
-chevron6 = string.gsub(chevron6,"6","")
-chevron6 = decode(chevron6)
-
-chevron7 = string.match(done,"7.")
-done = string.gsub(done,"7.","")
-chevron7 = string.gsub(chevron7,"7","")
-chevron7 = decode(chevron7)
-
---chevron2 to chevron4 = X
---chevron5 to chevron7 = Z
---chevron 1 = Y
-
-
-LockY = chevron1 * 2
-LockX = chevron2 + chevron3
-LockZ = chevron5 + chevron6
-LockX = LockX * chevron4
-LockZ = LockZ * chevron7
-
-print(LockX)
-print(LockY)
-print(LockZ)
-gateAddress = gateAddress..LockX.." "..LockY.." "..LockZ
 local X = 0
 while not redstone.getInput("top") do
 redstone.setOutput("left",true)
@@ -400,13 +164,10 @@ break end
 sleep(1)
 end--while open
 
+break end
+end
 if redstone.getInput("top") then Gate.setCommand(gateAddress) end
+rednet.broadcast("DHDdone")
 end--while
 end--gate control
 
-Help = function()
-helps = {"to get an Address from Cords then:","1:symbols go from 1-26 or a-z then 27-36 or A-J","2:determine Y Threw chevron7 * 2 = cords Y","3:(chevron6 + chevron5) * chevron4 = cords X","4:(chevron1 + chevron2) * chevron1 = cords Z"}
-
-
-for i =  1, #helps do print(helps[i]) end
-end--end of Help
