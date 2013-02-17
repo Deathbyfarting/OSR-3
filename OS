@@ -20,7 +20,7 @@ desktop = function()
 term.setCursorPos(1,1)
 term.setTextColor(colors.white)
 print("Menu")
-
+paintutils.drawLine(1,1,1,51,colors.gray)
 term.setCursorPos(7,1)
 term.setBackgroundColor(colors.gray)
 print("Server ID "..serverID)
@@ -144,7 +144,7 @@ end
 
 --logoff
 if API.isOn(1,8,8,8,mouseX,mouseY) then
---API.login()
+login()
 end
 
 end--drop menu
