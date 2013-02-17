@@ -1,10 +1,13 @@
 startFile
-
+if not term.isColor() then error("you must run this OS on a adv computer") end
 users    ={"guest","admin"}
 passwords={"pass","pass"}
 access   ={0,4}
 
-if not term.isColor() then error("you must run this OS on a adv computer") end
+clearanceLevel=0
+--network
+serverID = 0
+net = rednet
 os.loadAPI("bios/API")
 os.loadAPI("bios/StarGate")
 
