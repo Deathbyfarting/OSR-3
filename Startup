@@ -7,8 +7,10 @@ net.open("bottom")
 net.open("left")
 net.open("back")
 net.open("right")
-URLS = {"https://raw.github.com/Deathbyfarting/OS-R/master/startup", https://raw.github.com/Deathbyfarting/OS-R/master/wallpaper}
-Path = {"/startup",/bios/wallpaper}
+URLS = {"https://raw.github.com/Deathbyfarting/OSR-3/master/OS",
+"https://raw.github.com/Deathbyfarting/OSR-3/master/API",
+"https://raw.github.com/Deathbyfarting/OSR-3/master/StarGate"}
+Path = {"/OS","/bios/API","/bios/StarGate"}
 
 update = "https://raw.github.com/Deathbyfarting/OS-R/master/README.md"
 
