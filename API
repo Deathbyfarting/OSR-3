@@ -1,3 +1,4 @@
+startFile
 --diskSide() returns the side diskdrive is on
 --keycard(pass,boolean) pass = what code it is looking on, boolean is wether it runs forever
 --newCard(pass) pass = what code is written in disk/code file
@@ -92,3 +93,4 @@ nilCheck = function(var)
 if var == nil then var = 0 end
 return var
 end
+endFile
