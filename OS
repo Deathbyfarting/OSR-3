@@ -1,3 +1,4 @@
+startFile
 if not term.isColor() then error("you must run this OS on a adv computer") end
 os.loadAPI("bios/API")
 os.loadAPI("bios/StarGate")
@@ -29,3 +30,4 @@ end--if
 
 
 end
+endFile
