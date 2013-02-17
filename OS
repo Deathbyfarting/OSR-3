@@ -17,9 +17,9 @@ term.clear()
 end
 
 desktop = function()
-term.setCursorPos(1,1)
-term.setTextColor(colors.white)
 paintutils.drawLine(1,1,51,1,colors.gray)
+term.setTextColor(colors.white)
+term.setCursorPos(1,1)
 print("Menu")
 term.setCursorPos(7,1)
 term.setBackgroundColor(colors.gray)
