@@ -1,5 +1,6 @@
 if not term.isColor() then error("you must run this OS on a adv computer") end
-os.loadAPI("thisIsATest")
+os.loadAPI("bios/API")
+os.loadAPI("bios/StarGate")
 
 term.setBackgroundColor(colors.blue)
 term.clear()
