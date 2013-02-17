@@ -1,7 +1,41 @@
 startFile
+
+users    ={"guest","admin"}
+passwords={"pass","pass"}
+access   ={0,4}
+
 if not term.isColor() then error("you must run this OS on a adv computer") end
 os.loadAPI("bios/API")
 os.loadAPI("bios/StarGate")
+
+login = function()--start login
+local fail = false
+while not fail do
+term.setBackgroundColor(colors.lightBlue)  term.clear()
+for j=1,8 do  for i=1,24 do
+paintutils.drawPixel(15+i,4+j,colors.lightGray)end end
+term.setCursorPos(24,5)  print("login:")
+term.setCursorPos(17,8)  print("user:")
+term.setCursorPos(17,10) print("password:")
+
+term.setCursorPos(22,8)  user = read()
+term.setCursorPos(26,10) password = read("*")
+for i = 1, # user do
+if user == users[i] and password == passwords[i] then
+term.setCursorPos(22,11)  print("Welcome "..users[i])  sleep(3)
+clearanceLevel = access[i]
+fail = true
+end--if
+end--for
+if not fail then
+term.setBackgroundColor(colors.red)
+term.setCursorPos(22,11)
+print("Login Failed")
+sleep(3)
+end--fail
+
+end--while
+end--login
 
 term.setBackgroundColor(colors.blue)
 term.clear()
@@ -13,7 +47,7 @@ textutils.slowWrite("-", 100) end
 term.setCursorPos(21,10)
 textutils.slowWrite("OS-R", 100)
 sleep(3)
-
+login()
 
 
 Tick = function()
