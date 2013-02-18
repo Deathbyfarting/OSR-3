@@ -1,4 +1,6 @@
 startFile
+
+
 --"800 6 700"-x y z
 validGates = {"+1a2a3a4a5a6a7a80","+1b2b3b4b5b6b7b8b","end"}
 path = {"495 23 261","518 21 256","end"}
@@ -6,7 +8,7 @@ symbol={"a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r",
 
 --sender
 DHD = function()
-os.loadAPI("API")
+os.loadAPI("/bios/API")
 rednet.open("top")
 isDone = false
 address = "+"
@@ -171,5 +173,7 @@ if redstone.getInput("top") then Gate.setCommand(gateAddress) end
 rednet.broadcast("DHDdone")
 end--while
 end--gate control
+
+
 
 endFile
