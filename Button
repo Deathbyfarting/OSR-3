@@ -1,3 +1,4 @@
+startFile
 --example
 --local things,var = thisIsATest.new(12,12,12,12,12,"stuff",13)
 
@@ -13,3 +14,5 @@ end
 update = function(x,y,endX,endY,color)
 for i = 1, endY-y do paintutils.drawLine(x,y+i-1,endX,endY+i-1, color) end
 end
+
+endFile
