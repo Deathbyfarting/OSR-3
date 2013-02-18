@@ -1,3 +1,4 @@
+
 if not term.isColor() then error("you must run this OS on a adv computer") end
 
 --network
@@ -9,8 +10,9 @@ net.open("back")
 net.open("right")
 URLS = {"https://raw.github.com/Deathbyfarting/OSR-3/master/OS",
 "https://raw.github.com/Deathbyfarting/OSR-3/master/API",
-"https://raw.github.com/Deathbyfarting/OSR-3/master/StarGate"}
-Path = {"/OS","/bios/API","/bios/StarGate"}
+"https://raw.github.com/Deathbyfarting/OSR-3/master/StarGate",
+"https://raw.github.com/Deathbyfarting/OSR-3/master/Button"}
+Path = {"/OS","/bios/API","/bios/StarGate","/bios/Button"}
 
 update = "https://raw.github.com/Deathbyfarting/OS-R/master/README.md"
 
@@ -20,7 +22,7 @@ function getFile(url,path)
         local file = fs.open(path,"w")
         print("removing \\")
 write = textutils.serialize(content.readAll())
-a = string.gsub(write, '\\', " " )
+a = string.gsub(write, '\\', "" )
 a = string.gsub(a, '"startFile', "" )
 a = string.gsub(a, 'endFile"', "" )
         file.write(a)
@@ -53,9 +55,44 @@ for i = 1, # URLS do
 getFile(URLS[i],Path[i]) end
 
 local file = fs.open("/bios/version","w")
-versionfin = string.gsub(content, '\\', " " )
+versionfin = string.gsub(content, '\\', "" )
 file.write(versionfin)
 file.close()
 print("content dumped into file")
-
 end
+
+--boot file
+if not fs.exists("/bios/Boot") then  --makes the check agaist file if needed
+local file = fs.open("/bios/Boot","w")
+file.write("OS")
+file.close()
+print("created Boot file")
+end            --end if exists
+
+--makes boot file for stargate
+if not fs.exists("/Gate") then  --makes the check agaist file if needed
+local file = fs.open("/Gate","w")
+file.write("os.loadAPI('/bios/StarGate') StarGate.GateControl(true)")
+file.close()
+print("created Gate Boot file")
+end            --end if exists
+
+--makes boot file for DHD
+if not fs.exists("/DHD") then  --makes the check agaist file if needed
+local file = fs.open("/DHD","w")
+file.write("os.loadAPI('/bios/StarGate') while true do StarGate.DHD() end")
+file.close()
+print("created DHD Boot file")
+end            --end if exists
+
+
+--get boot
+file = fs.open("/bios/Boot","r")
+local boot = file.readLine()
+file.close()
+print(boot)
+print("booting")
+sleep(2)
+bootDrive = "/"..boot
+
+shell.run(bootDrive)
