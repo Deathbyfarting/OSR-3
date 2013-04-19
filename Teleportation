@@ -1,0 +1,39 @@
+
+MonitorTele = function()
+
+ButtonX    = {2,2,2,2}--
+ButtonY = {2,6,10,14}--
+ButtonName = {"Bridge","Shield Gen","Nature","outside"}
+--tp @p X Y Z
+Address = {"-44 111 13","-40 58 58","-81 67 98","-12 68 23"}
+main = "tp @p "
+
+monitor.clear()
+event,side,X,Y = os.pullEvent()
+while true do
+mainAddress = ""
+for i=1, #ButtonName do
+monitor.setCursorPos(ButtonX[i],ButtonY[i])
+monitor.setBackgroundColor(colors.red)
+monitor.write(string.rep(" ",string.len(ButtonName[i])+2))
+monitor.setCursorPos(ButtonX[i],ButtonY[i]+1)
+monitor.write(" "..ButtonName[i].." ")
+monitor.setCursorPos(ButtonX[i],ButtonY[i]+2)
+monitor.write(string.rep(" ",string.len(ButtonName[i])+2))
+monitor.setBackgroundColor(colors.black)
+
+end
+
+event,side,X,Y = os.pullEvent("monitor_touch")
+
+for i=1, #ButtonX do
+if API.isOn(X,Y,ButtonX[i],ButtonY[i],ButtonX[i]+string.len(ButtonName[i])+2,ButtonY[i]+3) then
+mainAddress = main..Address[i]
+print(ButtonName[i])
+print(mainAddress)
+if not redstone.getInput("right") then
+cmd.setCommand(mainAddress)
+cmd.runCommand()
+
+end end end end end
+
