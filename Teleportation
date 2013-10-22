@@ -13,6 +13,15 @@ cmd   = peripheral.wrap(commandBlockSide)
 if not modem or not cmd then
 print("modem not on the right side")
 
+symbol={"a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z","A","B","C","D","E","F","G","H","I","J"}
+
+HomeSymbol = 
+
+--math.random(lower, upper)
+--
+
+
+
 List = {
         [Address]="",
     [Destination]="",
@@ -24,8 +33,13 @@ List = {
     [Destination]="",
     
         [Address]="",
-    [Destination]="",
+    [Destination]=""
 }
+
+for Addr,Dest in pairs(List) do
+print(Addr.." : "..Dest)
+end
+
 -- math.mod(number, 2) == 0 for checking if even
 
 MonitorTele = function()
