@@ -1,26 +1,29 @@
 startFile
+
+--in BIOS/OS
+--wallpaper in BIOS/Wallpaper
 if not term.isColor() then error("you must run this OS on a adv computer") end
 users    ={"guest","admin"}
 passwords={"pass","pass"}
 access   ={0,4}
 
-clearanceLevel=0
---network
 serverID = 0
-net = rednet
+clearanceLevel = 0
+--network
 os.loadAPI("bios/API")
-os.loadAPI("bios/StarGate")
+wallpaper = paintutils.loadImage("BIOS/image/wallpaper")
+LoginScreen = paintutils.loadImage("BIOS/image/Login")
+InputScreen = paintutils.loadImage("BIOS/image/Input")
 
 wallpaper = function()
-term.setBackgroundColor(colors.orange)
+term.setBackgroundColor(colors.black)
 term.clear()
+paintutils.drawImage(wallpaper,1,1)
 end
 
 desktop = function()
+wallpaper()
 paintutils.drawLine(1,1,51,1,colors.gray)
-term.setTextColor(colors.white)
-term.setCursorPos(1,1)
-print("Menu")
 term.setCursorPos(7,1)
 term.setBackgroundColor(colors.gray)
 print("Server ID "..serverID)
@@ -29,13 +32,10 @@ end
 login = function()--start login
 local fail = false
 while not fail do
-term.setBackgroundColor(colors.lightBlue)  term.clear()
-for j=1,8 do  for i=1,24 do
-paintutils.drawPixel(15+i,4+j,colors.lightGray)end end
+paintutils.drawImage(LoginScreen,1,1)
 term.setCursorPos(24,5)  print("login:")
 term.setCursorPos(17,8)  print("user:")
 term.setCursorPos(17,10) print("password:")
-
 term.setCursorPos(22,8)  user = read()
 term.setCursorPos(26,10) password = read("*")
 for i = 1, # user do
@@ -49,108 +49,58 @@ if not fail then
 term.setBackgroundColor(colors.red)
 term.setCursorPos(22,11)
 print("Login Failed")
-sleep(3)
+sleep(5)
 end--fail
-
 end--while
 end--login
 
-Tick = function()
-while true do
-wallpaper()
-desktop()
-API.printTime(43,1)
-os.startTimer(10)
+Input = function(x,y,header)
+offSetY = 0
+offSetX = 0
+InputText = ""
+paintutils.drawImage(InputScreen,x,y)
+Letters = {"A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z"}
+Codes   = {}
+BackSpace = "" 
+Left      = ""
+Right     = ""
+
+paintutils.drawImage(InputScreen,x,y)
+term.setCursorPos(x+offSetX,y+offSetY)
+write(InputText)
+
+local event, Button,mouseY,mouseX = os.pullEvent()
+for i=1, #Codes do
+if Codes[i] == Button then
+InputText = InputText..Letters[i]aintutils.drawImage(InputScreen,x,y)
+term.setCursorPos(x+offSetX,y+offSetY)
+write(InputText)
+
+elseif BackSpace == Button then
+InputText = string.reverse(InputText)
+string.gmatch(InputText,".")
+InputText = string.reverse(InputText)
+elseif Left == Button and select>0 then
+select = select+1
+elseif Right == Button and select<1 then
+select = select-1
+end--elseif Codes[i] == Button
+end--for #Codes
+
+
+
+
+
+end--input funct
+
 local event, button,mouseY,mouseX = os.pullEvent()
 mouseX = API.nilCheck(mouseX)
 mouseY = API.nilCheck(mouseY)
 button = API.nilCheck(button)
 
---drop menu
-if API.isOn(1,1,1,4,mouseX,mouseY) then
-term.setCursorPos(1,2)
-term.setBackgroundColor(colors.lightGray)
-print("About   ")
-print("        ")
-print("connect ")
-print("files   ")
-print("reboot  ")
-print("shutdown")
-print("log out ")
 
-local event, button,mouseX,mouseY = os.pullEvent("mouse_click")
-mouseX = API.nilCheck(mouseX)
-mouseY = API.nilCheck(mouseY)
-button = API.nilCheck(button)
 
-if--connect to server
-mouseX > 1 and mouseX < 9 and
-mouseY == 4 then
-wallpaper()
-desktop()
-term.setBackgroundColor(colors.black)
-term.setCursorPos(17,8)
-print("                 ")
-term.setCursorPos(17,9)
-print("  Id of server:  ")
-term.setCursorPos(17,10)
-print("                 ")
-term.setCursorPos(17,11)
-print("                 ")
-term.setCursorPos(17,12)
-print("                 ")
-term.setCursorPos(20,11)
-ser = read()
 
-local test = tonumber(ser)
-net.send(2,"PING")
-term.setCursorPos(17,12)
-print("contacting server")
-local id,msg,dis = net.receive(10)
-local id1,name,dis1 = net.receive(10)
-if msg == "Received" then
-serverID = 0
-serverID = serverID + ser
-term.setCursorPos(17,12)
-print("server name: "..name)
-else--if
-term.setCursorPos(16,13)
-print("can't contact server")
-end--if
-sleep(3)
-wallpaper()
-desktop()
-end--end connection to server
-
---files
-if API.isOn(1,5,8,5,mouseX,mouseY) then
-
-end
-
---reboot
-if API.isOn(1,6,8,6,mouseX,mouseY) then
-print("stuff")
-sleep(2)
-shell.run("reboot")
-end
-
---shutdown
-if API.isOn(1,7,8,7,mouseX,mouseY) then
-term.setCursorPos(18,8)
-print("shutting down..")
-sleep(3)
-shell.run("shutdown")
-end
-
---logoff
-if API.isOn(1,8,8,8,mouseX,mouseY) then
-login()
-end
-
-end--drop menu
-
-end--while
-end--end tick
 
 term.setBackgroundColor(colors.blue)
 term.clear()
@@ -163,6 +113,5 @@ term.setCursorPos(21,10)
 textutils.slowWrite("OS-R", 100)
 sleep(3)
 login()
-Tick()
 
 endFile
