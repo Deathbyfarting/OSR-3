@@ -59,8 +59,6 @@ offSetY = 0
 offSetX = 0
 InputText = ""
 paintutils.drawImage(InputScreen,x,y)
-Letters = {"A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z"}
-Codes   = {}
 BackSpace = "" 
 Left      = ""
 Right     = ""
@@ -70,9 +68,10 @@ term.setCursorPos(x+offSetX,y+offSetY)
 write(InputText)
 
 local event, Button,mouseY,mouseX = os.pullEvent()
-for i=1, #Codes do
-if Codes[i] == Button then
-InputText = InputText..Letters[i]aintutils.drawImage(InputScreen,x,y)
+
+InputText = InputText..keys.getName(Button)
+paintutils.drawImage(InputScreen,x,y)
+
 term.setCursorPos(x+offSetX,y+offSetY)
 write(InputText)
 
@@ -85,7 +84,6 @@ select = select+1
 elseif Right == Button and select<1 then
 select = select-1
 end--elseif Codes[i] == Button
-end--for #Codes
 
 
 
