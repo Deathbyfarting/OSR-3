@@ -13,14 +13,13 @@ clearanceLevel = 0
 os.loadAPI("bios/API")
 wallpaper = paintutils.loadImage("BIOS/image/wallpaper")
 LoginScreen = paintutils.loadImage("BIOS/image/Login")
-InputScreen = paintutils.loadImage("BIOS/image/Input")
-
+--======================================================================================================================
 wallpaper = function()
 term.setBackgroundColor(colors.black)
 term.clear()
 paintutils.drawImage(wallpaper,1,1)
 end
-
+--======================================================================================================================
 desktop = function()
 wallpaper()
 paintutils.drawLine(1,1,51,1,colors.gray)
@@ -28,7 +27,7 @@ term.setCursorPos(7,1)
 term.setBackgroundColor(colors.gray)
 print("Server ID "..serverID)
 end
-
+--======================================================================================================================
 login = function()--start login
 local fail = false
 while not fail do
@@ -53,43 +52,72 @@ sleep(5)
 end--fail
 end--while
 end--login
-
+--=====================================================================================================================
 Input = function(x,y,header)
-offSetY = 0
-offSetX = 0
-InputText = ""
-paintutils.drawImage(InputScreen,x,y)
-BackSpace = "" 
+BackSpace = ""
+Enter     = ""
 Left      = ""
 Right     = ""
+select = 0
+InputText = ""
+Menu = {"[OK]","[CANCEL]"}
+Screen={  "|=================================|",
+          "|                                 |",
+          "|                                 |",
+          "|                                 |",
+          "|                                 |",
+          "|  OK                      CANCEL |",
+          "|=================================|"}
 
-paintutils.drawImage(InputScreen,x,y)
-term.setCursorPos(x+offSetX,y+offSetY)
+while true do
+term.setBackgroundColor(color.black)
+for i=1, #Screen do
+term.setCursorPos(x,y+i-1)
+print(Screen[i])
+end
+term.setCursorPos(x+1,y+1)
+print(header)
+term.setCursorPos(x+1,y+3)
 write(InputText)
+if select == 0 then
+term.setCursorPos(x+3,y+5)
+write(Menu[1])
+else
+term.setCursorPos(x+27,y+5)
+write(Menu[2])end
 
 local event, Button,mouseY,mouseX = os.pullEvent()
-
 InputText = InputText..keys.getName(Button)
-paintutils.drawImage(InputScreen,x,y)
-
-term.setCursorPos(x+offSetX,y+offSetY)
-write(InputText)
-
-elseif BackSpace == Button then
+if BackSpace == Button then
 InputText = string.reverse(InputText)
-string.gmatch(InputText,".")
+remove = string.gmatch(InputText,".")
+string.gsub(InputText,remove,1)
 InputText = string.reverse(InputText)
 elseif Left == Button and select>0 then
 select = select+1
 elseif Right == Button and select<1 then
 select = select-1
+elseif Enter == Button and select<1 then
+return true,InputText
+elseif Enter == Button and select>1 then
+return false,nil
 end--elseif Codes[i] == Button
-
-
-
-
-
+end--while
 end--input funct
+--======================================================================================================================
+fileBrowser = function()
+Default = "BIOS/Files"
+path = fs.list(Default)
+list = {}
+
+for i=1, #list do
+setCursorPos(1,1+i)
+if i/2 then term.
+
+print(list[i])
+end--for #list
+
+end
 
 local event, button,mouseY,mouseX = os.pullEvent()
 mouseX = API.nilCheck(mouseX)
@@ -111,5 +139,8 @@ term.setCursorPos(21,10)
 textutils.slowWrite("OS-R", 100)
 sleep(3)
 login()
+
+
+
 
 endFile
