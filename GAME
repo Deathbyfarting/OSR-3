@@ -1,0 +1,73 @@
+
+CARDS = {}
+Spell = {}
+
+
+LifeTotal=20
+Attack = {}
+Block = {}
+Player1Hand={}
+Player2Hand={}
+Player1Field={}
+Player2Field={}
+Player1Grave={}
+Player2Grave={}
+Player1Deck={}
+Player2Deck={}
+turn = 0
+
+
+Draw = function()
+if turn == 0 then
+removeCard = math.rand(#Player1Deck)
+table.insert(Player1Hand,Player1Deck[removeCard])
+table.remove(Player1Deck,removeCard)
+else
+
+end--if turn
+end--draw func
+--==========================================================
+PlayField = function(Card,player,field)
+if not player[Card] then return "none" end
+table.remove(player[Card])
+table.insert(field[Card])
+end
+--==========================================================
+Block = function(Blocking)
+Block = {}
+for i=1, #Blocking do
+table.insert(Block,Blocking[i])
+end--for #arry
+end--Block func
+
+--==========================================================
+Attack = function(arry)
+Attack{}
+for i=1, #arry do
+table.insert(Attack,arry[i])
+end--for #arry
+end--Attack
+
+--==========================================================
+Combat = function()
+damage = 0
+for i=1 #Block do
+if Attack[i] > Block[i] or Attack[i]==Block[i] then damage=damage+Block[i]-Attack[i] end 
+end--for #Block
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
