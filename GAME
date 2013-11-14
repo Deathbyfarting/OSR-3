@@ -1,4 +1,3 @@
-
 CARDS = {}
 Spell = {}
 
@@ -56,12 +55,13 @@ if Attack[i] > Block[i] or Attack[i]==Block[i] then damage=damage+Block[i]-Attac
 end--for #Block
 
 
+while true do
+local side,sender,reply,msg,dis = os.pullEventRaw()
+if string.gmatch(msg,"Attack")=="Attack" then
 
+end
 
-
-
-
-
+end
 
 
 
