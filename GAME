@@ -1,6 +1,7 @@
 CARDS = {}
 Spell = {}
 
+dtil7 = false
 
 LifeTotal=20
 Attack = {}
@@ -46,14 +47,23 @@ for i=1, #arry do
 table.insert(Attack,arry[i])
 end--for #arry
 end--Attack
-
 --==========================================================
-Combat = function()
-damage = 0
-for i=1 #Block do
-if Attack[i] > Block[i] or Attack[i]==Block[i] then damage=damage+Block[i]-Attack[i] end 
+Combat = function(Attacking,Blocking)
+PlayerDamage=0
+Att
 end--for #Block
 
+
+
+
+
+while true do
+if dtil7 then for i=1, 7-#DataBase.Hand do Draw() else Draw() end
+
+
+
+
+end--while
 
 while true do
 local side,sender,reply,msg,dis = os.pullEventRaw()
