@@ -1,36 +1,133 @@
-CARDS = {}
-Spell = {}
+--Rules
+deckViewer = false--run as deckViewer
+Client = true     --run as Client
+Server = false    --run as Server
+Draw7 = true--draw up to 7 at the beginning of your turn
+FieldColor = colors.orange
 
-dtil7 = false
+--dim X=82 Y=40
+--size X=51  Y=19
 
-LifeTotal=20
+Field      =8
+CardDisplay=9
+DashDisplay=5
+id=os.getComputerID()
+modem.open(id)--client send
+modem.open(1)--base send
+modem.open(10)--server send
+
+posS = {2,18,34,50,66}--y=3
+mon = peripheral.wrap("monitor_"..Field)
+CardViewer = peripheral.wrap("monitor_"..CardDisplay)
+DashBoard = peripheral.wrap("monitor_"..DashDisplay)--39,5
+modem.open(1)
+select = 1
+selectField = 1
+
+Cards =  {
+--atributes can't be more than 13 chars
+--attack,defense,isLand
+		   Land = {"Land",0,0,true},
+		     Ra = {"Creature",0,0,false,"LifeLink","Protection"},
+		 Slifer = {"Creature",#DataBase.Hand,#DataBase.Hand,false,"DeathTouch","Protection"},
+		Obelisk = {"Creature",40,40,false,"Trample","Protection"},
+--Spells
+		godsTouch = {"Spell","You gain","5 Life"},
+		FreshStart = {"Enchentment","You gain","5 Life"}
+}
+
 Attack = {}
 Block = {}
-Player1Hand={}
-Player2Hand={}
-Player1Field={}
-Player2Field={}
-Player1Grave={}
-Player2Grave={}
-Player1Deck={}
-Player2Deck={}
-turn = 0
+DataBase = {
+	Life = 20,
+	Grave = {},
+	 Deck = {},
+	  Tap = {},
+       Attack = {},
+ 	 Hand = {},
+	Field = {},
+	Spell = {},
+	Mana  = 0,
+     BlueMana  =0,
+     WhiteMana =0,
+     BlackMana =0,
+     GreenMana =0,
+     RedMana   =0
+}
 
+CardTemp = {
+"|=============|",
+"|             |",
+"|             |",
+"|             |",
+"|             |",
+"|=============|",
+"|             |",
+"|             |",
+"|             |",
+"|             |",
+"|             |",
+"|             |",
+"|             |",
+"|             |",
+"|             |",
+"|=============|",
+}
+--=====================================================================================
+loadDeck = function(load)
+Deck = fs.open(load,"r")
+DeckName = Deck.readLine()
+while true do
+Card = Deck.readLine()
+if Card == nil then break else
+table.insert(DataBase.Deck,Card)
+end--if nil
+end--while true
+Deck.close()
+return deck
+end
 
+--=============================================================================================================================================
+printCard = function(input,x,y)
+if input=="Ra" then 
+for i=1, DataBase.Life-1 do
+DataBase.Life=DataBase.Life-1
+Cards.Ra[2]=Cards.Ra[2]+1
+Cards.Ra[3]=Cards.Ra[3]+1
+end
+end--"Ra"
+CardDetails = Cards[input]
+if CardDetails == nil then CardDetails = {0,0,"Invalid card"} end
+for i=1, #CardTemp do
+term.setCursorPos(x,y+i-1)
+print(CardTemp[i])
+end--for #Card
+posY = 0
+for i=1,#CardDetails do
+if type(CardDetails[i]) == "string" then
+term.setCursorPos(x+1,y+6+posY)
+posY=posY+1
+print(CardDetails[i])
+end--if type
+end--for #Cards
+if CardDetails[1]=="Creature" then
+term.setCursorPos(x+9,y+14)
+print(CardDetails[2].."|"..CardDetails[3])
+end
+term.setCursorPos(x+1,y+1)
+print(input)
+end--printCard
+--=========================================================================
 Draw = function()
-if turn == 0 then
-removeCard = math.rand(#Player1Deck)
-table.insert(Player1Hand,Player1Deck[removeCard])
-table.remove(Player1Deck,removeCard)
-else
-
-end--if turn
+removeCard = math.rand(#DataBase.Deck)
+table.insert(DataBase.Hand,DataBaseDeck[removeCard])
+table.remove(DataBase.Deck,removeCard)
 end--draw func
 --==========================================================
 PlayField = function(Card,player,field)
-if not player[Card] then return "none" end
-table.remove(player[Card])
-table.insert(field[Card])
+if not DataBase.Hand[Card] then return "none" end
+table.remove(DataBase.Hand[Card])
+table.insert(DataBase.Field[Card])
 end
 --==========================================================
 Block = function(Blocking)
@@ -47,40 +144,71 @@ for i=1, #arry do
 table.insert(Attack,arry[i])
 end--for #arry
 end--Attack
+
 --==========================================================
-Combat = function(Attacking,Blocking)
-PlayerDamage=0
-Att
+Combat = function()
+damage = 0
+for i=1, #Block do
+if Attack[i] > Block[i] or Attack[i]==Block[i] then damage=damage+Block[i]-Attack[i] end 
 end--for #Block
-
-
-
-
-
-while true do
-if dtil7 then for i=1, 7-#DataBase.Hand do Draw() else Draw() end
-
-
-
-
-end--while
-
-while true do
-local side,sender,reply,msg,dis = os.pullEventRaw()
-if string.gmatch(msg,"Attack")=="Attack" then
-
+end--Combat
+--=====================================================================================
+MakeNewDeck = function()
+if disk.isPresent("drive_"..diskNumb) and not fs.exists("disk/Deck") and disk.getLabel("drive_"..diskNumb)==nil then
+print("OK")
+disk.setLabel("drive_"..diskNumb,"Deck")
+Deck = fs.open("disk/Deck","w")
+Deck.writeLine("")
+Deck.close()
+else print("Fail")
 end
-
 end
+--======================================================================================
+if deckViewer then
+redstone.setOutput("back",true)
+DataBase["DeckP1"] = loadDeck("disk/Deck")
+select = 1
+sizeX,sizeY = CardViewer.getSize()
+while deckViewer do
+print(DataBase.DeckP1[select])
+term.redirect(CardViewer)
+printCard(DataBase.DeckP1[select],1,1)
+term.restore()
+CardViewer.setCursorPos(sizeX/2-7,sizeY-3)
+print("select is:"..select)
 
+CardViewer.setBackgroundColor(colors.orange)
+CardViewer.setCursorPos(sizeX/2-7,sizeY-2)
+CardViewer.write("     ")
+CardViewer.setCursorPos(sizeX/2-7,sizeY-1)
+CardViewer.write("  <  ")
+CardViewer.setCursorPos(sizeX/2-7,sizeY)
+CardViewer.write("     ")
+--=======================================
+CardViewer.setCursorPos(sizeX/2+2,sizeY-2)
+CardViewer.write("     ")
+CardViewer.setCursorPos(sizeX/2+2,sizeY-1)
+CardViewer.write("  >  ")
+CardViewer.setCursorPos(sizeX/2+2,sizeY)
+CardViewer.write("     ")
+CardViewer.setCursorPos(1,sizeY-1)
+CardViewer.write("Card")
+CardViewer.setCursorPos(1,sizeY)
+CardViewer.write("Numb="..select)
+CardViewer.setBackgroundColor(colors.black)
 
+local event,side,X,Y = os.pullEvent()
+if event=="redstone" then X=0 Y=0 end
+print("event is:"..event)
+if event=="key" then redstone.setOutput("back",false) error("done") end
+if X <sizeX/2-2 and X>sizeX/2-7 and Y>sizeY-2 and Y<sizeY and select>1 then select = select-1 end
+if X >sizeX/2+2 and X<sizeX/2+7 and Y>sizeY-2 and Y<sizeY and select<#DataBase.DeckP1 then select = select+1 end
+end--if deckViewer
+end--while deckViewer
+--==================================================================================================================================
+DrawField = function()
 
-id=os.getComputerID()
-modem.open(id)--client send
-modem.open(1)--base send
-modem.open(10)--server send
-TurnNumb = -1
-
+if Client then
 --Startup
 print("PlayerName?")
 PlayerName=read()
@@ -89,11 +217,63 @@ while true do
 local event,sender,receiver,msg,dis = os.eventPullRaw("modem_message")
 if sender==10 and receiver==id and string.gmatch(msg,"Turn order :")=="Turn order :" then TurnNumb=msg break end
 end
+while true do
+print("Please put deck into Drive")
+if loadDeck("disk/Deck") then 
+print("Deck Loaded you can take it out now")
+break
+else
+print("Place deck in drive and hit enter.")
+read()
+end end
+
+for i=1, 7 do Draw() end
+while true do
+if Draw7 then for i=1, 7-#DataBase.Hand do Draw() end else Draw() end
+
+
+
+end--while true
+end--if Client
+-====================================================================================================================================
+if Server then
+while true do
+--receive msg
+local Side,Sender,Reply,msg,dis=os.pullEventRaw("modem_message")
+
+if string.gmatch(msg,"Increment")=="Increment" then
+pos=pos+1
+end
+--====================================================================
+--turn P1
+if pos==0 and (Turn%2)==0 then
+modem.transmit(1, 1, "YourTurn")  
+end
+--receive Attack P1
+if pos==1 and (Turn%2)==0 then
+local Side,Sender,Reply,msg,dis=os.pullEventRaw("modem_message")
+Attacking = textutils.unserialize(msg)
+--Send Attack to P2
+modem.transmit(1, 2, "YourTurn")
+end
+
+
+
+--check done===============================================================
+if LifeP1<1 or LifeP2<1 then
+
+end
+end
+--=========================================================================
+end--while true
+end--if Server
+
+id=os.getComputerID()
+modem.open(id)--client send
+modem.open(1)--base send
+modem.open(10)--server send
+TurnNumb = -1
 
 --End turn
 modem.transmit(id,100, "Pass turn")
-
-
-
-
 
