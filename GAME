@@ -75,7 +75,23 @@ end
 
 
 
+id=os.getComputerID()
+modem.open(id)--client send
+modem.open(1)--base send
+modem.open(10)--server send
+TurnNumb = -1
 
+--Startup
+print("PlayerName?")
+PlayerName=read()
+modem.transmit(1,id,"Register :"..PlayerName)
+while true do
+local event,sender,receiver,msg,dis = os.eventPullRaw("modem_message")
+if sender==10 and receiver==id and string.gmatch(msg,"Turn order :")=="Turn order :" then TurnNumb=msg break end
+end
+
+--End turn
+modem.transmit(id,100, "Pass turn")
 
 
 
