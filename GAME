@@ -74,6 +74,37 @@ CardTemp = {
 "|=============|",
 }
 --=====================================================================================
+manaDistribute = function(X,Y)
+in1 = X%Y
+in2 = X/Y
+return math.floor(in2),math.floor(in1)
+end
+--=====================================================================================
+Comparor = function(Cost,ManaPool)
+if Cost<ManaPool+1 then
+return true
+else
+return false
+end
+--=====================================================================================
+CostSub = function(input)
+input,BCost = string.gsub(input,"B")
+input,SCost = string.gsub(input,"S")
+input,RCost = string.gsub(input,"R")
+input,WCost = string.gsub(input,"W")
+input,GCost = string.gsub(input,"G")
+BlankCost = tonumber(input)
+
+if Comparor(SCost,BlackManaTemp) then return false end
+if Comparor(WCost,WhiteManaTemp) then return false end
+if Comparor(GCost,GreenManaTemp) then return false end
+if Comparor(BCost,BlueManaTemp) then return false end
+if Comparor(RCost,RedManaTemp) then return false end
+ManaDistribute,remainder = manaDistribute(BlankCost,5)
+
+
+end
+--=====================================================================================
 loadDeck = function(load)
 Deck = fs.open(load,"r")
 DeckName = Deck.readLine()
@@ -276,4 +307,12 @@ TurnNumb = -1
 
 --End turn
 modem.transmit(id,100, "Pass turn")
+
+
+
+manaInput = tonumber("10")
+ManaCost,remainder = manaDistribute(manaInput,5)
+
+
+
 
