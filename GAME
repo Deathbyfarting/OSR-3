@@ -3,6 +3,7 @@ deckViewer = false--run as deckViewer
 Client = true     --run as Client
 Server = false    --run as Server
 Draw7 = true--draw up to 7 at the beginning of your turn
+MultiLand = false
 FieldColor = colors.orange
 
 --dim X=82 Y=40
@@ -18,11 +19,13 @@ modem.open(10)--server send
 
 posS = {2,18,34,50,66}--y=3
 mon = peripheral.wrap("monitor_"..Field)
+CMD = peripheral.wrap("bottom")
 CardViewer = peripheral.wrap("monitor_"..CardDisplay)
 DashBoard = peripheral.wrap("monitor_"..DashDisplay)--39,5
 modem.open(1)
 select = 1
 selectField = 1
+playedLand = false
 
 Cards =  {
 --atributes can't be more than 13 chars
@@ -39,7 +42,8 @@ Cards =  {
 Attack = {}
 Block = {}
 DataBase = {
-	Life = 20,
+       Player = ""
+	 Life = 20,
 	Grave = {},
 	 Deck = {},
 	  Tap = {},
@@ -48,11 +52,11 @@ DataBase = {
 	Field = {},
 	Spell = {},
 	Mana  = 0,
-     BlueMana  =0,
-     WhiteMana =0,
-     BlackMana =0,
-     GreenMana =0,
-     RedMana   =0
+    BlueMana  = 0,
+    WhiteMana = 0,
+    BlackMana = 0,
+    GreenMana = 0,
+    RedMana   = 0
 }
 
 CardTemp = {
@@ -104,11 +108,6 @@ return false
 end
 --=====================================================================================
 CostSub = function(input)
-BCost = 0
-SCost = 0
-RCost = 0
-WCost = 0
-GCost = 0
 ManaCost = Window(5,5,"Write out Mana cost using letters","B=Black,W=White,U=Blue,R=Red,G=Green","Cost :"..input)--40
 ManaCost,BCost = string.gsub(ManaCost,"B","")
 ManaCost,UCost = string.gsub(ManaCost,"U","")
@@ -199,7 +198,10 @@ for i=1, #arry do
 table.insert(Attack,arry[i])
 end--for #arry
 end--Attack
-
+--==========================================================
+TPlayer = function(input)
+CMD.runCommand("/tp @p[name="..DataBase.Player.."] "..input)
+end
 --==========================================================
 Combat = function()
 damage = 0
@@ -211,6 +213,8 @@ end--Combat
 MakeNewDeck = function()
 if disk.isPresent("drive_"..diskNumb) and not fs.exists("disk/Deck") and disk.getLabel("drive_"..diskNumb)==nil then
 print("OK")
+window(5,5,"","What do you want it called","")
+window(5,5,"","","")
 disk.setLabel("drive_"..diskNumb,"Deck")
 Deck = fs.open("disk/Deck","w")
 Deck.writeLine("")
@@ -267,6 +271,7 @@ if Client then
 --Startup
 print("PlayerName?")
 PlayerName=read()
+DataBase.Player = PlayerName
 modem.transmit(1,id,"Register :"..PlayerName)
 while true do
 local event,sender,receiver,msg,dis = os.eventPullRaw("modem_message")
