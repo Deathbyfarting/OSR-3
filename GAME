@@ -7,8 +7,9 @@ MultiLand = false
 FieldColor = colors.orange
 --size X=51  Y=19
 
-Field      =8
+Field=8
 id=os.getComputerID()
+sizeX,sizeY = term.getSize()
 modem.open(id)--client send
 modem.open(1)--base send
 modem.open(10)--server send
@@ -21,7 +22,7 @@ selectField = 1
 Cards =  {
 --atributes can't be more than 13 chars
 --attack,defense,isLand
-		   Land = {"","Land",0,0,true},
+		   Land = {" ","Land",0,0,true},
 		     Ra = {"10SSSSS","Creature",0,0,false,"LifeLink","Protection"},
 		 Slifer = {"10RRRRR","Creature",#DataBase.Hand,#DataBase.Hand,false,"DeathTouch","Protection"},
 		Obelisk = {"10UUUUU","Creature",40,40,false,"Trample","Protection"},
@@ -110,7 +111,6 @@ end--while true
 Deck.close()
 return deck
 end
-
 --=============================================================================================================================================
 printCard = function(input,x,y)
 if input=="Ra" then 
