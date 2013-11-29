@@ -19,24 +19,13 @@ CMD = peripheral.wrap("bottom")
 select = 1
 selectField = 1
 
-Cards =  {
---atributes can't be more than 13 chars
---attack,defense,isLand
-		   Land = {" ","Land",0,0,true},
-		     Ra = {"10SSSSS","Creature",0,0,false,"LifeLink","Protection"},
-		 Slifer = {"10RRRRR","Creature",#DataBase.Hand,#DataBase.Hand,false,"DeathTouch","Protection"},
-		Obelisk = {"10UUUUU","Creature",40,40,false,"Trample","Protection"},
---Spells
-		godsTouch = {"Spell","You gain","5 Life"},
-		FreshStart = {"Enchentment","You gain","5 Life"}
-}
 DataBase = {
    playedLand = false,
 	turn  = -1,
        Player = "",
 	 Life = 20,
 	Grave = {},
-	 Deck = {},
+	 Deck = {"Slifer","Ra","Ra","Obelisk","Slifer","Obelisk","BeefySliver","ArtifactSliver","JeweledBackSliver"},
 	  Tap = {},
 	Block = {},
        Attack = {},
@@ -46,6 +35,7 @@ DataBase = {
 	Mana  = 0,
     BlueMana  = 0,
     WhiteMana = 0,
+  sliverBonus = 0,
     BlackMana = 0,
     GreenMana = 0,
     RedMana   = 0,
@@ -58,6 +48,24 @@ DataBase = {
 "|========================================|",
 }
 }--DataBase
+--======================================================================================================================
+Cards =  {
+--atributes can't be more than 13 chars
+--attack,defense,isLand
+		   Land = {" ","Land",0,0,true},
+		     Ra = {"10SSSSS","Creature",0,0,false,"LifeLink","Protection"},
+		 Slifer = {"10RRRRR","Creature",#DataBase.Hand,#DataBase.Hand,false,"DeathTouch","Protection"},
+		Obelisk = {"10UUUUU","Creature",40,40,false,"Trample","Protection"},
+
+--slivers
+		ArtifactSliver = {"3","Creature",1+DataBase.sliverBonus,1+DataBase.sliverBonus,false}
+		BeefySliver = {"4R","Creature",1+DataBase.sliverBonus,10+DataBase.sliverBonus,false}
+		JeweledBackSliver = {"1G","Creature",1+DataBase.sliverBonus,1+DataBase.sliverBonus,false}
+
+--Spells
+		godsTouch = {"Spell","You gain","5 Life"},
+		FreshStart = {"Enchentment","You gain","5 Life"}
+}
 --======================================================================================================================
 Window = function(X,Y,text,text1,text2)
 for i=1, #Win do term.setCursorPos(X,Y+i-1) print(DataBase.Win[i]) end
