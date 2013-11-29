@@ -320,27 +320,86 @@ end--while check deck
 
 end
 --=============================================================================
-DrawPhase()
+DrawPhase = function()
 if Draw7 then for i=1, 7-#DataBase.Hand do Draw() end else Draw() end
 end--drawphase
 --=============================================================================
-unTapPhase()
+unTapPhase = function()
+DataBase.Tap = {}
 end--untapphase
 --=============================================================================
-MainPhase()
+MainPhase = function()
+while true do
+--    event,modemside,sender,receiver
+local event,monitor  ,X     ,Y       ,msg,dis=os.pullEventRaw()
+if event=="modem_message" and string.gmatch(msg,"Your Turn")=="YourTurn" then turn = true end
+if X==nil or Y==nil then X=-1 Y=-1 end
+if event=="mouse_click" then
+--hand select
+if X <4 and X>0 and Y>0 and Y<5 and select>1 then select = select-1 end
+if X <9 and X>5 and Y>0 and Y<5 and select<#DataBase.Hand then select = select+1 end
+--field select
+if X <13 and X>9 and Y>0 and Y<5 and selectField>1 then selectField = selectField-1 end
+if X <18 and X>14 and Y>0 and Y<5 and selectField<#DataBase.Field then selectField = selectField+1 end
+
+--Tap button==================================================================================================
+if X <9 and X>0 and Y==3 then
+if DataBase.Field[1]==nil then else TapD = true
+for i=1, #DataBase.Tap do if DataBase.Tap[i] == selectField then TapD=false print(#DataBase.Tap) end end
+if TapD then table.insert(DataBase.Tap,selectField) table.insert(DataBase.Attack,selectField) end end end
+
+--withdraw attack==============================================================================================
+if X <9 and X>0 and Y==4 then
+for i=1, #DataBase.Tap do
+if DataBase.Tap[i] == selectField then remove=true end
+if remove then
+table.remove(DataBase.Tap,i)
+table.remove(DataBase.Attack,i) end
+end--for #TAp
+end--if
+
+--Use=========================================================================================================
+if X <9 and X>0 and Y==5 then
+if DataBase.Hand[1]==nil then else
+mem = Cards[DataBase.Hand[select]]
+if mem[2] == "Creature" and CostSub(mem[1]) then
+table.insert(DataBase.Field,DataBase.Hand[select])
+table.remove(DataBase.Hand,select)
+else
+end--if "creature"
+end--if
+end--if
+
+
+
+
+--end turn=====================================================================================================
+if X <9 and X>0 and Y==7 then
+break
+modem.transmit(id,100,"Pass Turn")
+end
+
+end--if event=="mouse_click"
+end--while true
 end--MainPhase
 --=============================================================================
-AttackPhase()
+AttackPhase = function()
+window(sizeX,sizeY,"What would you like to attack with,","Use the pos numb with / in between","like: 1/5/3")
 end--AttackPhase
 --=============================================================================
-EndPhase()
+EndPhase = function()
+--in vinilla this doesn't do anything but spells will use this
 end--endPhase
 --=============================================================================
-ResponcePhase()
+ResponcePhase = function()
+
+end
+--=============================================================================
 while true do
 
 end end--both while end funct
 
+if Client then
 Startup()
 while true do
 DrawPhase()
@@ -351,5 +410,5 @@ MainPhase()
 EndStep()
 ResponcePhase()
 end
-
+end--if client
 
