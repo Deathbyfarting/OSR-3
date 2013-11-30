@@ -8,14 +8,17 @@ FieldColor = colors.orange
 --size X=51  Y=19
 
 Field=8
-id=os.getComputerID()
+modem="left"
+id = os.getComputerID()
+print(id)
 sizeX,sizeY = term.getSize()
+posS = {2,18,34,50,66}--y=3
+modem = peripheral.wrap(modem)
+mon = peripheral.wrap("monitor_"..Field)
+CMD = peripheral.wrap("bottom")
 modem.open(id)--client send
 modem.open(1)--base send
 modem.open(10)--server send
-posS = {2,18,34,50,66}--y=3
-mon = peripheral.wrap("monitor_"..Field)
-CMD = peripheral.wrap("bottom")
 select = 1
 selectField = 1
 
@@ -58,9 +61,9 @@ Cards =  {
 		Obelisk = {"10UUUUU","Creature",40,40,false,"Trample","Protection"},
 
 --slivers
-		ArtifactSliver = {"3","Creature",1+DataBase.sliverBonus,1+DataBase.sliverBonus,false}
-		BeefySliver = {"4R","Creature",1+DataBase.sliverBonus,10+DataBase.sliverBonus,false}
-		JeweledBackSliver = {"1G","Creature",1+DataBase.sliverBonus,1+DataBase.sliverBonus,false}
+		ArtifactSliver = {"3","Creature",1+DataBase.sliverBonus,1+DataBase.sliverBonus,false},
+		BeefySliver = {"4R","Creature",1+DataBase.sliverBonus,10+DataBase.sliverBonus,false},
+		JeweledBackSliver = {"1G","Creature",1+DataBase.sliverBonus,1+DataBase.sliverBonus,false},
 
 --Spells
 		godsTouch = {"Spell","You gain","5 Life"},
@@ -84,6 +87,7 @@ if Cost<ManaPool+1 then
 return true
 else
 return false
+end
 end
 --=====================================================================================
 CostSub = function(input)
@@ -251,69 +255,18 @@ end--while deckViewer
 --==================================================================================================================================
 DrawField = function()
 
-
-for i=1, 7 do Draw() end
-while true do
-if Draw7 then for i=1, 7-#DataBase.Hand do Draw() end else Draw() end
-
-
-
-end--while true
 end--if Client
--====================================================================================================================================
-if Server then
-while true do
---receive msg
-local Side,Sender,Reply,msg,dis=os.pullEventRaw("modem_message")
+--====================================================================================================================================
 
-if string.gmatch(msg,"Increment")=="Increment" then
-pos=pos+1
-end
---====================================================================
---turn P1
-modem.transmit(1, 1, "YourTurn")  
-end
---receive Attack P1
-if pos==1 and (Turn%2)==0 then
-local Side,Sender,Reply,msg,dis=os.pullEventRaw("modem_message")
-Attacking = textutils.unserialize(msg)
---Send Attack to P2
-modem.transmit(1, 2, "YourTurn")
-end
-
-
-
---check done===============================================================
-if LifeP1<1 or LifeP2<1 then
-
-end
-end
---=========================================================================
-end--while true
-end--if Server
-
-id=os.getComputerID()
-modem.open(id)--client send
-modem.open(1)--base send
-modem.open(10)--server send
-TurnNumb = -1
-
---End turn
-modem.transmit(id,100, "Pass turn")
-
-
-
-manaInput = tonumber("10")
-ManaCost,remainder = manaDistribute(manaInput,5)
 --=============================================================================
-Startup()
+Startup = function()
 --Startup
 print("PlayerName?")
 PlayerName=read()
 DataBase.Player = PlayerName
 modem.transmit(1,id,"Register :"..PlayerName)
 while true do
-local event,sender,receiver,msg,dis = os.eventPullRaw("modem_message")
+local event,sender,receiver,msg,dis = os.pullEventRaw("modem_message")
 if sender==10 and receiver==id and string.gmatch(msg,"Turn order :")=="Turn order :" then TurnNumb=msg break end
 end
 while true do
@@ -325,7 +278,7 @@ else
 print("Place deck in drive and hit enter.")
 read()
 end--while check deck
-
+end
 end
 --=============================================================================
 DrawPhase = function()
@@ -338,6 +291,7 @@ end--untapphase
 --=============================================================================
 MainPhase = function()
 while true do
+
 --    event,modemside,sender,receiver
 local event,monitor  ,X     ,Y       ,msg,dis=os.pullEventRaw()
 if event=="modem_message" and string.gmatch(msg,"Your Turn")=="YourTurn" then turn = true end
@@ -383,8 +337,8 @@ end--if
 
 --end turn=====================================================================================================
 if X <9 and X>0 and Y==7 then
-break
 modem.transmit(id,100,"Pass Turn")
+break
 end
 
 end--if event=="mouse_click"
@@ -403,9 +357,6 @@ ResponcePhase = function()
 
 end
 --=============================================================================
-while true do
-
-end end--both while end funct
 
 if Client then
 Startup()
@@ -419,4 +370,3 @@ EndStep()
 ResponcePhase()
 end
 end--if client
-
