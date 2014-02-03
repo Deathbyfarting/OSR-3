@@ -1,0 +1,32 @@
+if not fs.isDir("BIOS/password") then
+fs.makeDir("BIOS")
+fs.makeDir("BIOS/password")
+userFile = fs.open("BIOS/password/Guest","w")
+userFile.write("password")
+userFile.close()
+end
+while true do
+login = false
+userPass =""
+term.clear()
+term.setCusrorPos(1,1)
+write("UserName : ")
+login = read()
+term.setCusrorPos(1,2)
+write("Password : ")
+password = read()
+if not login==nil or not password = nil then
+ExistingUser = fs.list(BIOS/password)
+for i=1,#ExistingUser do
+if ExistingUser[i] == login then
+userFile = fs.open("BIOS/password/"..ExistingUser[i],"r")
+userPass = userFile.readLine()
+userFile.close()
+if userPass == password then login = true end
+end--if Existing
+end--for #existingUser
+if login == true then break end--============================================================================
+else--login==nil//password==nil
+print("invalid username/password")
+end--login==nil//password==nil
+end--while
