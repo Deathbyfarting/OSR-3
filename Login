@@ -1,3 +1,20 @@
+posY = 2
+posX = 2
+Window = {
+"|================================|"
+"|Login :                         |"
+"|                                |"
+"|Password :                      |"
+"|================================|"
+}
+setWindow = function(color)
+term.setBackgroundColor(color)
+for i=1, #Window do
+term.setCursorPos(posX,posY+i-1)
+term.write(Window[i])
+end--for #window
+end--setWindow
+
 if not fs.isDir("BIOS/password") then
 fs.makeDir("BIOS")
 fs.makeDir("BIOS/password")
@@ -8,11 +25,13 @@ end
 while true do
 login = false
 userPass =""
+term.setBackgroundColor(colors.orange)
 term.clear()
-term.setCusrorPos(1,1)
-write("UserName : ")
+setWindow(colors.orange)
+term.setBackgroundColor(colors.black)
+term.setCusrorPos(posX+8,posY+1)
 login = read()
-term.setCusrorPos(1,2)
+term.setCusrorPos(posX+11,posY+3)
 write("Password : ")
 password = read()
 if not login==nil or not password = nil then
