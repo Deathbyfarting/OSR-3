@@ -1,3 +1,17 @@
+settings = {
+isServer = false
+}
+DataBase = {
+life
+deck
+field
+hand
+grave
+exile
+}
+Cards{
+}
+
 
 
 
