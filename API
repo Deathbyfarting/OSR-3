@@ -1,3 +1,17 @@
+weight = 13
+offset = 5
+alpha = {"a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z"}
+Alpha = {"A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z"}
+weightOf = function(letter)
+for i=1, #alpha do
+if alpha[i] = letter then return weight^i*offset end
+end--#alpha
+for i=1, #Alpha do
+if Alpha[i] = letter then return weight^i*offset*3 end
+end--#Alpha
+return 0
+end--weightOf
+
 startFile
 --diskSide() returns the side diskdrive is on
 --keycard(pass,boolean) pass = what code it is looking on, boolean is wether it runs forever
