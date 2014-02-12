@@ -1,0 +1,55 @@
+error("not entitled to use")
+alpha = {
+"a","b","c","d","e","f","g","h","i","j","k","l","m","n","p","q","r","s","t","u","v","w","x","y","z",
+"A","B","C","D","E","F","G","H","I","J","K","L","M","N","P","Q","R","S","T","U","V","W","X","Y","Z",
+" ","!","@","#","$","%","^","&","*","(",")","_","-","+","=","~","`","/"
+}
+gear1 = 0
+gear2 = 0
+gear3 = 0
+gear1Stop= 24
+gear2Stop= 24
+gear3Stop= 24
+--encrypt(gear1start,gear2start,gear3start,encryptionCode,boolean)
+function = encrypt()
+args = {...}
+output = ""
+gear1 = args[1]
+gear2 = args[2]
+gear3 = args[3]
+code = args[4]
+while string.len(code)>0 do
+done false
+letter = ""
+letter = string.gmatch(code,".")
+code = string.gsub(code,letter,"",1)
+for i=1, #alpha do
+if letter==alpha[i] and done==false then
+if args[5]==true then
+output=output..alpha[i+gear1+gear2+gear3]
+else
+output=output..alpha[i-gear1-gear2-gear3]
+end
+done = true
+end--if letter match
+end--for #alpha
+gear1=gear1+1
+if gear1 > gear1Stop then gear1=0 gear2=gear2+1 end
+if gear2 > gear2Stop then gear2=0 gear3=gear3+1 end
+if gear3 > gear3Stop then gear3=0 end
+end--while
+return output
+end--function encrypt
+
+
+
+
+
+
+
+
+
+
+
+
+
